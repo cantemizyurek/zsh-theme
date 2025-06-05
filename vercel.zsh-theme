@@ -9,6 +9,9 @@ GIT_PROMPT_SUFFIX="$resetColor] "
 GIT_PROMPT_DIRTY="%{$fg_bold[red]%}"
 GIT_PROMPT_CLEAN="%{$fg_bold[green]%}"
 
+NODE_PROMPT_PREFIX="⬢ %{$fg_bold[green]%}"
+NODE_PROMPT_SUFFIX="$resetColor "
+
 # modified from https://github.com/robbyrussell/oh-my-zsh/blob/576ada138fc5eed3f58a4aff8141e483310c90fb/lib/git.zsh#L12
 function branch_is_dirty() {
   local STATUS=''
@@ -42,6 +45,15 @@ function git_prompt() {
       echo "$GIT_PROMPT_PREFIX$GIT_PROMPT_CLEAN$branch$GIT_PROMPT_SUFFIX"
     fi
   fi
-
 }
-PROMPT='$logo (cantemizyurek) $dir $(git_prompt)'
+
+function node_prompt() {
+  if command -v node &> /dev/null; then
+    local node_version=$(node --version 2>/dev/null | sed 's/v//')
+    if [[ -n $node_version ]]; then
+      echo "$NODE_PROMPT_PREFIX$node_version$NODE_PROMPT_SUFFIX"
+    fi
+  fi
+}
+
+PROMPT='$logo (cantemizyurek) $dir $(node_prompt)$(git_prompt)'
